@@ -20,10 +20,14 @@ def load_demandas():
         for demanda in demandas_csv:
             demanda["passenger_volume"] = int(demanda["passenger_volume"])
             demanda["average_rating"] = float(demanda["average_rating"])
-            x = requests.post(BASE_URL + "/travel/demandas", json=demanda)
-            if not x.ok:
-                print(f"Failed to post demanda {x.status_code} - {demanda}")
-                print(x.json())  # Imprimir el mensaje de error detallado
+            try:
+                response = requests.post(BASE_URL + "/travel/demandas", json=demanda)
+                if not response.ok:
+                    print(f"Error: {response.status_code}, Response: {response.text}")
+            except Exception as e:
+                print(f"Error al realizar la solicitud: {e}")
+
+
 
 
 
@@ -39,6 +43,6 @@ def load_travels():
 
 if __name__ == "__main__":
     # Mandamos ejecutar las cargas de datos
-    #load_air()
+    load_air()
     load_demandas()
-    #load_travels()
+    load_travels()

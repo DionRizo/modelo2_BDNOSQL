@@ -36,25 +36,30 @@ def list_airports(country):
         print(f"Error: {response}")
 
 
-def recommend_food_beverage_services():
-    suffix = "/travel/food-beverage-evaluations"
+def recommend_food_beverage_services(airport_name, assessment_id=None):
+    suffix = f"/travel/food-beverage-evaluations/{airport_name}"
+    params = {}
+    if assessment_id:
+        params['assessment_id'] = assessment_id
     endpoint = AIRPORTS_API_URL + suffix
-    response = requests.get(endpoint)
+    response = requests.get(endpoint, params=params)
     if response.ok:
-        json_resp = response.json()
-        for evaluation in json_resp:
-            airport = evaluation["evaluated_airport"]
-            average_rating = evaluation["average_rating"]
-            passenger_volume = evaluation["passenger_volume"]
-            
-            if passenger_volume > 100000 and average_rating < 3:
-                print(f"Recomendado abrir servicios de alimentos/bebidas en {airport}")
+        recommendation = response.json()
+        if recommendation["recommendation"] == "Recommended":
+            print(f"Recomendado abrir servicios de alimentos/bebidas en {airport_name}")
+        else:
+            print(f"No es recomendable abrir otro servicio de alimentos/bebidas en {airport_name}")
     else:
-        print(f"No es recomendable: {response}")
+        print(f"Error al obtener datos para el aeropuerto {airport_name}: {response}")
 
 def main():
-    log.info(f"Welcome to airport food and beverage service recommendation. App requests to: {AIRPORTS_API_URL}")
-    recommend_food_beverage_services()
+    log.info(f"Welcome to the airport food and beverage service recommendation app. Requests to: {AIRPORTS_API_URL}")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-a", "--airport", help="Specify an airport to evaluate for food/beverage services", required=True)
+    parser.add_argument("-id", "--id", help="Specify an assessment ID", type=int, default=None)
+    args = parser.parse_args()
+
+    recommend_food_beverage_services(args.airport, args.id)
 
 if __name__ == "__main__":
     main()

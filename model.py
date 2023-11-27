@@ -2,6 +2,7 @@ import uuid
 from pydantic import BaseModel, Field
 
 
+
 class Airport(BaseModel):
     airport_id: str = Field(default_factory=uuid.uuid4, alias="_id")
     airport_name: str
