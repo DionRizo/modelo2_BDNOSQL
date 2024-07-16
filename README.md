@@ -1,5 +1,6 @@
 # modelo2_BDNOSQL
-Mi modelo del proyecto de nuestra clase de bases de datos no sql 2023
+Mi modelo del proyecto de nuestra clase de bases de datos no sql 2023. Modelo el cual te da una lista de aeropuertos y una lista de restaurantes con bebidas
+y el programa te detecta en base a los datos recopilados en que aeropuerto es mas recomendable poner un restaurante.
 
 
 ### Setup a python virtual env with python cassandra installed
